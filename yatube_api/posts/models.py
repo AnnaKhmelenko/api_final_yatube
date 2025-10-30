@@ -29,6 +29,9 @@ class Post(models.Model):
     image = models.ImageField(
         upload_to='posts/', null=True, blank=True)
 
+    class Meta:
+        ordering = ['-pub_date']
+
     def __str__(self):
         return self.text
 
@@ -41,6 +44,12 @@ class Comment(models.Model):
     text = models.TextField()
     created = models.DateTimeField(
         'Дата добавления', auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created']
+
+    def __str__(self):
+        return f'Комментарий {self.author} к посту {self.post.id}'
 
 
 class Follow(models.Model):
@@ -62,6 +71,7 @@ class Follow(models.Model):
                 name='unique_follow'
             )
         ]
+        ordering = ['-id']
 
     def clean(self):
         if self.user == self.following:
